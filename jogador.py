@@ -30,6 +30,14 @@ class Jogador:
 
     def cria_jogada(self):
         jogada = []
+        print("(", colored(f'1', 'green'), ") 1 par - Vale 2 fichas")
+        print("(", colored(f'2', 'green'), ") 1 trio - Vale 3 fichas")
+        print("(", colored(f'3', 'green'), ") 2 pares - Vale 4 fichas")
+        print("(", colored(f'4', 'green'), ") 1 Full House - Vale 5 fichas")
+        print("(", colored(f'5', 'green'), ") 1 Sequência Baixa - Vale 7 fichas")
+        print("(", colored(f'6', 'green'), ") 1 Sequência Alta - Vale 7 fichas")
+        print("(", colored(f'7', 'green'), ") 1 Quadra - Vale 10 fichas")
+        print("(", colored(f'8', 'green'), ") 1 Quinteto - Vale 15 fichas")
 
         num_jogada = input("Escolha uma jogada para realizar: ")
         num_jogada = int(num_jogada)
