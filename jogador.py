@@ -1,27 +1,14 @@
 from pickle import FALSE, TRUE
 from random import randint
-from socket import socket
-import sys
 from termcolor import colored
-from bitarray import bitarray
-import os
-
-MSG_INICIO = 0
-MSG_ORIGEM = 1
-MSG_DESTINO = 2
-MSG_RECEBIDA = 3
-MSG_LIDA = 4
-MSG_TIPO = 5
-MSG_DADOS = 6
-MSG_PARIDADE = 7
-
+import constants
 
 class Jogador:
     def __init__(self, jogador_addr, prox_addr, sock):
         self.jogador_addr = jogador_addr
         self.prox_addr = prox_addr
         self.sock = sock
-        self.fichas = 10
+        self.fichas = 3
         self.bastao = 0
     
     def inicia_bastao(self, bastao_addr):
@@ -82,7 +69,7 @@ class Jogador:
     def propoe_aposta(self, data):
         print('Você tem fichas:' + colored(f'{self.fichas}', 'green'))
 
-        print (f'O jogador' + colored(f' {data[MSG_DADOS][2][1]} ', 'yellow') + 'fez a jogada' + colored(f' {data[MSG_DADOS][0]} ', 'red') + 'o valor da aposta está em' + colored(f' {data[MSG_DADOS][1]} fichas', 'cyan'))
+        print (f'O jogador' + colored(f' {data[constants.MSG_DADOS][2][1]} ', 'yellow') + 'fez a jogada' + colored(f' {data[constants.MSG_DADOS][0]} ', 'red') + 'o valor da aposta está em' + colored(f' {data[constants.MSG_DADOS][1]} fichas', 'cyan'))
 
         res = input("\n Deseja cobrir a aposta do jogador por mais 1 ficha? (s para sim e n para não)")
 
@@ -90,8 +77,8 @@ class Jogador:
             res = input("\n Deseja cobrir a aposta do jogador por mais 1 ficha? (s para sim e n para não)")
 
         if(res == 's'):
-            data[MSG_DADOS][1] += 1
-            data[MSG_DADOS][2] = self.jogador_addr
+            data[constants.MSG_DADOS][1] += 1
+            data[constants.MSG_DADOS][2] = self.jogador_addr
 
     def joga_dados(self):
         dados = []
@@ -136,6 +123,8 @@ class Jogador:
             for i in range(1,7):
                 if(dados.count(i) >= 2):
                     num_pares += 1
+                if(dados.count(i) >= 4):
+                    num_pares = 2
 
                 if(num_pares >= 2):
                     return TRUE
@@ -190,14 +179,14 @@ class Jogador:
             return FALSE
     
     def realiza_jogada(self, data):
-        self.realiza_aposta(data[MSG_DADOS][1])
+        self.realiza_aposta(data[constants.MSG_DADOS][1])
 
         dados = self.joga_dados()
 
         print(f'{dados}, ')
 
-        if (self.verifica_vitoria(dados, data[MSG_DADOS][0]) == TRUE):
-            self.recebe_aposta(data[MSG_DADOS][3])
+        if (self.verifica_vitoria(dados, data[constants.MSG_DADOS][0]) == TRUE):
+            self.recebe_aposta(data[constants.MSG_DADOS][3])
             print('Você ganhou!!!')
 
             return 1
@@ -215,8 +204,8 @@ class Jogador:
 
                 print(f'{dados}, ')
             
-            if (self.verifica_vitoria(dados, data[MSG_DADOS][0]) == TRUE):
-                self.recebe_aposta(data[MSG_DADOS][3])
+            if (self.verifica_vitoria(dados, data[constants.MSG_DADOS][0]) == TRUE):
+                self.recebe_aposta(data[constants.MSG_DADOS][3])
                 print('Você ganhou!!!')
 
                 return 1
